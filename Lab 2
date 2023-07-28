@@ -1,0 +1,19 @@
+<html>
+<head>
+  <title>This is Jack's first web page!</title>
+</head>
+<!--This is my lab 02 webpage -->
+<body>
+
+  <h1>About Me</h1>
+  
+  <h3>What I Do</h3>
+  
+  <P>I am a student at Dartmouth College</P>
+  
+  <h3>Where I live</h3>
+  
+  <p>I am from <em>Park City, Utah</em>, but I currently live in Hanover.</p>
+
+</body>
+</html>
