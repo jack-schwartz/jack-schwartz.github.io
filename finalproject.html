@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <title>Seattle Gentrification</title> 
+        
+        <style type="text/css">
+			html, body { height: 100%; margin: 20; padding: 20; background: #f3d1c9;}
+			#map { 
+			    height: 600px; 
+			    width: 80%; 
+			    padding: 20px;
+			    margin-left: auto;
+			    margin-right: auto;
+			    }
+			#buttons { padding: 10px; background: #f3d1c9; 
+			    margin-left: 500px;
+			   
+			}
+			H1 { text-align: center;
+			     background: #D8AE65;
+			   }
+			   
+			H2 { text-align: center; 
+			     background: #D8AE65;
+			   }
+			a.link { margin-left: 400px;
+			     background: #D8AE65;
+			   }
+			P.blocktext {
+                margin-left: auto;
+                margin-right: auto;
+                width: 40em
+                        }
+            
+		    P.datasource {
+		        text-align: center; 
+			     background: #D8AE65;
+		    }
+		        
+			.legend {
+                padding: 6px 8px;
+                font: 14px Arial, Helvetica, sans-serif;
+                background: white;
+                background: rgba(255, 255, 255, 0.8);
+                /*box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);*/
+                /*border-radius: 5px;*/
+                line-height: 24px;
+                color: #555;
+                    }
+            .legend h4 {
+                text-align: center;
+                font-size: 16px;
+                margin: 2px 12px 8px;
+                color: #777;
+                    }
+
+            .legend span {
+                position: relative;
+                bottom: 3px;
+                    }
+
+            .legend i {
+                width: 18px;
+                height: 18px;
+                float: left;
+                margin: 0 8px 0 0;
+                opacity: 0.7;
+                    }
+
+            .legend i.icon {
+                background-size: 18px;
+                background-color: rgba(255, 255, 255, 1);
+                    }
+		</style>
+		
+		 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            ></script>
+            
+        <script type="text/javascript" src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js?v1.3.0"></script>
+        
+        <!-- Load Esri Leaflet from CDN -->
+        <script src="https://unpkg.com/esri-leaflet@3.0.2/dist/esri-leaflet.js"
+         integrity="sha512-myckXhaJsP7Q7MZva03Tfme/MSF5a6HC2xryjAM4FxPLHGqlh5VALCbywHnzs2uPoF/4G/QVXyYDDSkp5nPfig=="
+             crossorigin=""></script>
+             
+<script> 
+            
+       var equityVisible = true;
+       
+       
+            var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	            maxZoom: 19,
+	            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        });
+                        
+            var esribasemaplayer = L.esri.basemapLayer('NationalGeographic');
+                        
+            
+            function initialize() {
+                
+                
+                var map = L.map('map', {
+                    center: [47.6224, -122.3367],  
+                    zoom: 15,                     
+                    layers: [OpenStreetMap_Mapnik]   
+
+                });
+                
+                   var baseMaps = { "OSM" : OpenStreetMap_Mapnik,
+                                "ESRI NationalGeographic": esribasemaplayer,
+                };
+                
+                var control = L.control.layers(baseMaps).addTo(map);
+                
+                
+                function getColor(d) {
+                    return d > 0.8 ? '#800026' :
+                            d > 0.6  ? '#BD0026' :
+                            d > 0.4  ? '#E31A1C' :
+                            d > 0.2  ? '#FC4E2A' :
+                            d > 0   ? '#FD8D3C' :
+                             '#FEB24C' ;
+                            
+}
+
+                function style(feature) {
+                    return {
+                    fillColor: getColor(feature.properties.SOCIOECONOMIC_PERCENTILE),
+                    weight: 2,
+                    opacity: 0.5,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.7
+                };
+            }
+                
+                
+                var response = $.ajax({
+                    url: "EquityIndex.geojson",
+                    dataType: "json",
+                    success: console.log("trails data loaded!"),
+                    error: function(xhr) {
+                        alert(xhr.statusText);
+                    }
+                });
+                
+                $.when(response).done(function() {
+                    
+                var equityLayer = L.geoJson(response.responseJSON,
+                        { style: style,
+                          onEachFeature: function(feature, layer) {
+                             layer.bindPopup("<b>Census Tract: " +
+                             feature.properties.NAME10 + "</b><br>" +
+                                 "Socioeconomic Index Percentile: " + 
+                                Math.round(feature.properties.SOCIOECONOMIC_PERCENTILE * 100.0) + "%<br>" +
+                                "Educational Attainment less than a Bachelor's Degree Percentile: " + 
+                                Math.round(feature.properties.PCT_LESS_BACHELOR_DEGREE * 100.0)+ "%<br>" +
+                                "Socioeconomic Quintile: " + 
+                                feature.properties.SOCIOECONOMIC_QUINTILE);
+                         }
+                          }).addTo(map);
+                          
+                          
+                 $("#toggleEquity").show();       
+                   $("#toggleEquity").click( function() {
+                       if (equityVisible) {
+                           equityVisible = false;
+                           equityLayer.removeFrom(map);
+                       } else {
+                           equityVisible = true;
+                           equityLayer.addTo(map);
+                          
+                       }
+                
+                   })
+                   
+                   
+                   var legend = L.control({ position: "bottomleft" });
+
+                    legend.onAdd = function(map) {
+                    var div = L.DomUtil.create("div", "legend");
+                        div.innerHTML += "<h4>Socioeconomic Index</h4>";
+                        div.innerHTML += '<i style="background: #800026"></i><span>Highest Risk/Most Disadvantaged</span><br>';
+                        div.innerHTML += '<i style="background: #BD0026"></i><span>Second Highest</span><br>';
+                        div.innerHTML += '<i style="background: #E31A1C"></i><span>Middle</span><br>';
+                        div.innerHTML += '<i style="background: #FC4E2A"></i><span>Second Lowest</span><br>';
+                        div.innerHTML += '<i style="background: #FD8D3C"></i><span>Lowest</span><br>';
+ 
+  
+                        return div;
+                    };
+
+                    legend.addTo(map);
+                    
+            // Amazon Gentrification Popups                    
+
+            var Cricket = L.marker([47.62284563135412, -122.3365540254079])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Cricket </h3>");
+            
+            var Van_Vorst = L.marker([47.622628691301095, -122.33615705845858])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Van Vorst </h3>");
+            
+            var Invictus = L.marker([47.62224542834243, -122.33680078856975])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Invictus </h3>");
+            
+            var Gatsby = L.marker([47.622838400027995, -122.33805606237601])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Gatsby </h3>");
+            
+            var Brazil = L.marker([47.62271546742979, -122.3393649803824])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Brazil </h3>");
+            
+            var Nessie = L.marker([47.62378065631876, -122.33940702467771])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Nessie </h3>");
+            
+            var Delight = L.marker([47.62338328945265, -122.33893407571186])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Delight </h3>");
+            
+            var Bigfoot = L.marker([47.624326485001816, -122.33937463091291])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Bigfoot </h3>");
+            
+            var Wainwright = L.marker([47.62414745382173, -122.33749579263696])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Wainwright </h3>");
+            
+            var Obidos = L.marker([47.62418238678302, -122.33624539331629])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Obidos </h3>");
+            
+            var Rufus = L.marker([47.623610356602995, -122.33684143858832])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Rufus </h3>");
+            
+            var Fiona = L.marker([47.62382432282251, -122.3353448466975])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Fiona </h3>");
+            
+            var Amelia = L.marker([47.623662756574106, -122.33483302521391])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Amelia </h3>");
+            
+            var Apollo = L.marker([47.62151364818221, -122.3401428404073])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Apollo </h3>");
+            
+            var Dawson = L.marker([47.6216965270246, -122.33668539756697])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Dawson </h3>");
+            
+            var Ruby = L.marker([47.62118446465073, -122.33625903128763])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Ruby </h3>");
+            
+            var Houdini = L.marker([47.62149797282263, -122.33507295786343])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Houdini N and Houdini S </h3>");
+            
+            var Houston = L.marker([47.62054047537984, -122.33809912046378])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Amelia </h3>");
+            
+            var Roxanne = L.marker([47.61998605828968, -122.33810819314203])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Roxanne </h3>");
+            
+            var Arizona = L.marker([47.620317946611614, -122.33628636940678])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Arizona </h3>");
+            
+            var Varzea = L.marker([47.618236076668204, -122.33925516706735])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Varzea </h3>");
+            
+            var Otter = L.marker([47.61616390720936, -122.34399648026914])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Otter </h3>");
+            
+            var Coral = L.marker([47.61605879950822, -122.3415652363125])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Coral </h3>");
+            
+            var Day1 = L.marker([47.61610224573093, -122.34015784139702])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Day 1 </h3>");
+            
+            
+            var Spheres = L.marker([47.6157973654474, -122.33936995381572])
+            .addTo(map)
+            .bindPopup("<h3> Amazon The Spheres </h3>");
+            
+            var MeetingCenter = L.marker([47.615348939798636, -122.33902422217058])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Meeting Center </h3>");
+            
+            var Doppler = L.marker([47.61492019519785, -122.33835322282437])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Doppler </h3>");
+            
+            var Port = L.marker([47.61592018346919, -122.33741751906781])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Port 99 </h3>");
+            
+            var Blackfoot = L.marker([47.615634997365795, -122.33595727057941])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Blackfoot </h3>");
+            
+            var Kumo = L.marker([47.61643842091112, -122.33435600121685])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Kumo </h3>");
+            
+            var Oscar = L.marker([47.61628643480194, -122.33300280841085])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Oscar </h3>");
+            
+            var Hawk = L.marker([47.61680196368243, -122.33200859635743])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Lowflyinghawk </h3>");
+            
+            var Alexandria = L.marker([47.61521706398104, -122.3334130084516])
+            .addTo(map)
+            .bindPopup("<h3> Amazon Alexandria </h3>");
+            
+        
+            
+        
+                
+                });
+            }
+            // End initialize() function
+        
+        </script>
+             
+</head>      
+             
+      <body onload="initialize()">  <!-- run the initiialize() function when the page loads -->
+        <h1>Investigating Seattle Gentrification and the Impact of Amazon</h1>  <!-- Title above the map -->
+        <h2>Zahni Khin - Summer 2021</h2>
+        <P class="blocktext">
+            When gentrification in the United States is discussed, Seattle tends to be one of the most important cities to study and understand. With an extremely expensive housing market and a significant homeless population, the impacts of gentrification are extremely visible in the urban built form of the city.
+        </p>
+            
+        <P class="blocktext">
+            Although gentrification in Seattle started as early as the 1970s, the large influx of tech companies within the past 10 years has been an extremely large factor in the recent changes in Seattle. These tech companies have been able to reshape urban landscapes by bringing in a significant amount of revenue and new demographics. 
+        </p>
+        
+         <P class="blocktext">
+            Amazon has been one of the most significant tech companies in the surge of gentrification within Seattle. In 2011, the company established headquarters in South Lake Union, an area that had initialy been characterized by abandoned warehouses and industries. Quickly, rent sources rose and countless people were displaced. The area became characterized by large increases in income and education.  
+        </p>
+        
+        <P class="blocktext">
+            A new demographic of young tech workers characterized a large cultural change as well. Having the privilege to focus time and energy on environmental change and outdoor leisure, the new tech workers caused a dramatic shift in the physical landscape and architecture of South Lake Union and other parts of Seattle. Urban green spaces, clean public transportation, and protected bike lanes characterized the transformation of space that gentrified and displaced low income individuals in Seattle.  
+        </p>
+        
+        <P class="blocktext">
+            The following map displays the socioeconomic indexes of census tracts across Seattle as well as the educational attainment of the people in these spaces. The higher the socioeconomic index, the more at risk the people are in terms of poverty and lack of education. In addition, the blue markers display the wide array and spread of the Amazon campus in South Lake Union.    
+        </p>
+        
+        <div id="map"></div>   <!-- Object that contains the map -- placed after the title so that it is below the title -->
+        
+        <div id="buttons">
+            <button id="toggleEquity" hidden>Toggle the Socioeconomic Index Layer.</button>
+        </div>
+        
+        <h2>Data Source</h2>
+        <a class= "link", href="https://data-seattlecitygis.opendata.arcgis.com/datasets/SeattleCityGIS::racial-and-social-equity-composite-index/about">Racial and Social Equity Composite Index Data from Seattle GeoData</a>
+        
+        <P class="datasource">
+            Data last updated January 15, 2021
+            </p>
+    
+    </body>
+</html>
