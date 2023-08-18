@@ -1,1 +1,104 @@
+<!DOCTYPE: html>
+<html>
+  <head>
+    <title>Hangman</title> 
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+    
 
+    <script>
+      $(document).ready
+  
+        function(){
+         var total_guesses = 10;
+         var word = "w o r d";
+         var blanks = "_ _ _ _";
+         var guess = "";
+
+        $("#word").html(blanks);
+          
+        $(".letter").click(
+      function(){ 
+        var id = $(this).attr('id');  
+        console.log("Clicked on " + id);
+
+        if(guess.includes(id))
+          $("#error_msg").html("You already guessed " + id) // 
+      } else {
+          guess = guess + id; //
+          $("#" + id).css('text-decoration', 'line-through');
+          
+          total_guesses = total_guesses - 1;
+          if (total_guesses < 0) {
+            $("#error_msg").html("You ran out of guesses. YOU LOSE")
+        } else {
+            $("#numleft").html(total_guesses);
+            
+            if(word.includes(id)) { // If the word includes that letter
+              var index = word.indexOf(id);// Index is position in string where letter is. First letter starts at 0.
+              console.log("letter " + id + " is at index " + index);
+              blanks = blanks.substr(0, index) + id + // Substring returns all letters up to but not including index specified
+                  blanks.substr(index + 1);
+              $("#word").html(blanks);
+            }
+            if (blanks == word) {
+              $("#error_msg").text("YOU WON!!!!");
+              } 
+            }
+          }
+      }
+          )
+        }
+        );
+    </script>
+  </head>
+  
+  <body>
+    <h1>Guess that Word!</h1>
+    <div id="chances">
+      <p>
+        You have <span id="numleft">10</span> chances left 
+      </p>
+   </div>
+
+   <div>
+    <div id="wordspace">
+      <p>
+        The word to guess is <span id="word" style="font-weight: bold;"
+          ></span>
+      </p>
+    </div>
+    <div id="entry">
+      <p>Click on a letter to make a guess!</p>
+      <p>
+        <span class="letter" id="a">a</span>
+        <span class="letter" id="b">b</span>
+        <span class="letter" id="c">c</span>
+        <span class="letter" id="d">d</span>
+        <span class="letter" id="e">e</span>
+        <span class="letter" id="f">f</span>
+        <span class="letter" id="g">g</span>
+        <span class="letter" id="h">h</span>
+        <span class="letter" id="i">i</span>
+        <span class="letter" id="j">j</span>
+        <span class="letter" id="k">k</span>
+        <span class="letter" id="l">l</span>
+        <span class="letter" id="m">m</span>
+        <span class="letter" id="n">n</span>
+        <span class="letter" id="o">o</span>
+        <span class="letter" id="p">p</span>
+        <span class="letter" id="q">q</span>
+        <span class="letter" id="r">r</span>
+        <span class="letter" id="s">s</span>
+        <span class="letter" id="t">t</span>
+        <span class="letter" id="u">u</span>
+        <span class="letter" id="v">v</span>
+        <span class="letter" id="w">w</span>
+        <span class="letter" id="x">x</span>
+        <span class="letter" id="y">y</span>
+        <span class="letter" id="z">z</span>
+        
+      </p>
+  </body>
+</div>
+  <div id="error_msg" style="color:red;"></div>
+</html>
