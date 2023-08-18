@@ -3,6 +3,38 @@
 <head>
     <title>Hangman</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+
+        $(document.ready(
+
+            var total_guesses = 10;
+            var word = "w o r d";
+            var blanks = "_ _ _ _";
+            var guess = "";
+
+            function() {
+
+                $(".letter").click(
+
+                    function() {
+                        var id = $(this).attr('id');
+                        console.log("Clicked on " + id);
+
+                        if (guesses.includes(id)) {
+                            $("error_msg).html("You already guessed" + id);
+                        }
+                    }
+
+                        
+                    }
+
+
+                    )
+
+                });
+    
+    </script>
+
 </head>
 <body>
     <h1>Hangman!</h1>
