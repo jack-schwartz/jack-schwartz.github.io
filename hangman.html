@@ -22,38 +22,39 @@
         console.log("Clicked on " + id);
 
         if(guess.includes(id))
-          $("#error_msg").html("You already guessed " + id) // 
+          $("#error_msg").html("You already guessed " + id) 
       } else {
-          guess = guess + id; //
+          guess = guess + id; 
           $("#" + id).css('text-decoration', 'line-through');
           
           total_guesses = total_guesses - 1;
-          if (total_guesses < 0) {
+          if (total_guesses <= 0) {
             $("#error_msg").html("You ran out of guesses. YOU LOSE")
         } else {
             $("#numleft").html(total_guesses);
             
-            if(word.includes(id)) { // If the word includes that letter
-              var index = word.indexOf(id);// Index is position in string where letter is. First letter starts at 0.
+            if(word.includes(id)) {
+                var index = word.indexOf(id); 
               console.log("letter " + id + " is at index " + index);
-              blanks = blanks.substr(0, index) + id + // Substring returns all letters up to but not including index specified
-                  blanks.substr(index + 1);
+              blanks = blanks.substr(0, index) + id + 
+                blanks.substr(index + 1);
               $("#word").html(blanks);
             }
+            
             if (blanks == word) {
-              $("#error_msg").text("YOU WON!!!!");
+              $("#error_msg").text("BIG DUB");
               } 
-            }
+              }
           }
       }
-          )
+            )
         }
         );
     </script>
   </head>
   
   <body>
-    <h1>Guess that Word!</h1>
+    <h1>Hangman!</h1>
     <div id="chances">
       <p>
         You have <span id="numleft">10</span> chances left 
