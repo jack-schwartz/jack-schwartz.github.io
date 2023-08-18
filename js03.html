@@ -2,13 +2,18 @@
 <html>
   <head>
     <title>Hello Campus!</title>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  
+   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-   crossorigin=""></script>
-   <style>
+   crossorigin="">
+   </script>
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+   integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+   crossorigin=""/>
+    <style>
     #map { height: 400px; width: 700px; }
     html, body {height: 100%; margin: 0; padding: 0; }
-  </style>
+   </style>
   
   <script>
       var OpenStreetMap_HOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
