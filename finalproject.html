@@ -73,7 +73,6 @@
 
     </style>
 
-<script src="railroad.geojson"></script>
 
     <script>
 
@@ -91,13 +90,6 @@
   }
 
 
-L.geoJson(railroad,
-              { onEachFeature: function(feature, layer) {
-                 layer.bindPopup("<b>Name: " +
-                                 feature.properties.NAME + "</b>");
-               }
-              }).addTo(map);
-        }
 </script> 
     
 </head>
