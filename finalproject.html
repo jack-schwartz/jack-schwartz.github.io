@@ -73,7 +73,6 @@
 
     </style>
 
-<script src="pollution.geojson"></script>
 <script src="railroad.geojson"></script>
 
     <script>
@@ -91,12 +90,7 @@
     })
   }
 
-L.geoJson(pollution,
-              { onEachFeature: function(feature, layer) {
-                 layer.bindPopup("<b>Name: " +
-                                 feature.properties.NAME + "</b>");
-               }
-              }).addTo(map);
+
 L.geoJson(railroad,
               { onEachFeature: function(feature, layer) {
                  layer.bindPopup("<b>Name: " +
