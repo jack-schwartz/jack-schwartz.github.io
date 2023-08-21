@@ -70,12 +70,16 @@
         }
         #map { height: 400px; width: 700px; }
     html, body {height: 100%; margin: 0; padding: 0; }
+    #button { padding: 10px; background: #f3d1c9; }
 
     </style>
     <script src="railroad.geojson"></script>
     <script src="pollution.geojson"></script>
 
     <script>
+
+var pollution;
+var pollutionVisible = false;
 
   var OpenStreetMap_HOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
     { maxZoom: 19,
@@ -100,6 +104,15 @@ layer.bindPopup("<b>Name: " +
 feature.properties.NAME + "</b>");
 }}).addTo(map);
 
+    $("#togglePollution").click( function() {
+            if (pollutionVisible) {
+                 pollutionVisible = false;
+                 pollution.removeFrom(map);
+            } else {
+                 pollutionVisible = true;
+                 pollution.addTo(map);
+            }
+        })
 }
 
 </script> 
@@ -145,6 +158,9 @@ While not without its environmental concerns, railroads offer a comparatively gr
            <body onload="initialize()">
             <h2>Map</h2>
             <div id="map"></div>
+<div id="button">
+    <button id="togglepollution">Toggle the Pollution Layer.</button>
+  </div> 
         </section>
     </main>
     <footer>
