@@ -98,14 +98,14 @@ var pollutionStyle = {
         layers: [OpenStreetMap_HOT]
     })
   L.geoJson(railroad_geojson,{ 
-      style: pollutionStyle,
       onEachFeature: function(feature, layer) {
 layer.bindPopup("<b>Name: " +
 feature.properties.NAME + "</b>");
 }}).addTo(map);
 
- L.geoJson(pollution_geojson,
-    { onEachFeature: function(feature, layer) {
+ L.geoJson(pollution_geojson,{
+     style: pollutionStyle,
+     onEachFeature: function(feature, layer) {
 layer.bindPopup("<b>Name: " +
 feature.properties.NAME + "</b>");
 }}).addTo(map);
