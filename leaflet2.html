@@ -19,6 +19,7 @@
 
     <script src="trails2.geojson"></script>
     <script src=""railroad.geojson"></script>
+    <script src="keypoints.geojson"></script>
   
   <script>
        var OpenStreetMap_HOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
@@ -39,6 +40,13 @@ L.geoJson(trails2_geojson).addTo(map);
 layer.bindPopup("<b>Name: " +
 feature.properties.NAME + "</b>");
 }}).addTo(map);
+       
+  L.geoJson(key_points,
+       { onEachFeature: function(feature, layer) {
+                 layer.bindPopup("<b>Name: " +
+                                 feature.properties.NAME + "</b>");
+               }
+              }).addTo(map);
 
 
       
