@@ -73,9 +73,6 @@
 
     </style>
 
-    <script src="railroad.geojson"></script>
-
-
     <script>
 
   var OpenStreetMap_HOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
@@ -90,14 +87,6 @@
         layers: [OpenStreetMap_HOT]
     })
   }
-        L.geoJson(railroad_geojson, {
-      onEachFeature: function(feature, layer) {
-        layer.bindPopup("<b>Name: " + feature.properties.NAME + "</b>");
-      }
-        }  
-             ).addTo(map);
-  }
-
 
 </script> 
     
