@@ -73,6 +73,8 @@
 
     </style>
 
+    <script src="railroad.geojson"></script>
+
 
     <script>
 
@@ -87,6 +89,13 @@
         zoom: 11, // 
         layers: [OpenStreetMap_HOT]
     })
+  }
+        L.geoJson(railroad_geojson, {
+      onEachFeature: function(feature, layer) {
+        layer.bindPopup("<b>Name: " + feature.properties.NAME + "</b>");
+      }
+        }  
+             ).addTo(map);
   }
 
 
