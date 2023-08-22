@@ -93,7 +93,7 @@ function pointSymbology(feature) {
         
     railroad = L.geoJson(railroad_geojson,
               {   onEachFeature: function(feature, layer) {
-                  layer.bindPopup("<b>Name: " +
+                  layer.bindPopup("<b>Name:" +
                   feature.properties.NAME + "</b><br>" +
                   "Length: " + feature.properties.SECT_LENGTH);
                }
