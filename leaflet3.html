@@ -91,11 +91,11 @@ function pointSymbology(feature) {
 	        
               }).addTo(map);
         
-    rivers = L.geoJson(railroad_geojson,
+    railroad = L.geoJson(railroad_geojson,
               {   onEachFeature: function(feature, layer) {
-                  layer.bindPopup("<b>River Name: " +
-                  feature.properties.River_Name + "</b><br>" +
-                  "Length: " + feature.properties.LENGTH_MI);
+                  layer.bindPopup("<b>Name: " +
+                  feature.properties.NAME + "</b><br>" +
+                  "Length: " + feature.properties.SECT_LENGTH);
                }
               });
        
