@@ -12,7 +12,7 @@
 
   <style>
     #map1 { height: 400px; width: 700px; }
-    html, body {height: 100%; margin: 0; padding: 0; } <!-- Add styling to body of HTML -->
+    html, body {height: 100%; margin: 0; padding: 0; }
   </style>
 
   <script src="keypoints.geojson"></script>
@@ -27,9 +27,9 @@
 
   
   function initialize() {
-    var map = L.map('map1', { // inside parentheses of L.map() should be name of div for map.
+    var map = L.map('map1', {
       center: [43.7022, -72.2896],
-        zoom: 15, // Larger numbers = closer to objects
+        zoom: 13, // Larger numbers = closer to objects
         layers: [OpenStreetMap_HOT]
     })
 
